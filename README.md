@@ -1,7 +1,7 @@
 # botpress-dandelion
 
-Unofficial Botpress module for Dandelion (http://dandelion.eu). This module lets you use analyze incoming messages to your bot by processing the text through Dandelion powerful API
-At the moment it only extracts Entities from messages but future
+Unofficial Botpress module for Dandelion (http://dandelion.eu). This module lets you analyze incoming messages by processing the text through Dandelion powerful API.
+At the moment it only extracts Entities from messages. See the Contribution section if you want to see more features!
 
 
 ## Installation
@@ -18,8 +18,8 @@ botpress install dandelion
 
 ## Contribution
 
-As this module relies on [dandelion-api](https://github.com/giulioprinaricotti/node-dandelion) any help there might be appreciated.
-The library is very limitated so no expansions seems possible for this module until the library is more mature
+As this module relies on [dandelion-api](https://github.com/giulioprinaricotti/node-dandelion) any help on that library might be appreciated.
+The library is very limitated so no expansions seems possible for this module until the library is more mature.
 
 
 ## License
