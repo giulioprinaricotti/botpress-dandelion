@@ -3,23 +3,19 @@ import fs from 'fs'
 
 var DANDELION = require('dandelion-api');
 
-//import DANDELION from 'dandelion-api'
-
 let configFile = null
 let botPress = null;
 
 var Dandelion = new DANDELION.Dandelion()
 
-/*
-  Save config to File
-
-*   @param {string} file - the file path
+/**
+ * Save config to File
+ * @param {string} file - the file path
 */
 
 const saveConfig = (config) => {
   fs.writeFileSync(configFile, JSON.stringify(config))
 }
-
 
 /**
  * Load config from given file path
@@ -40,9 +36,6 @@ const loadConfig = () => {
   return Object.assign(JSON.parse(fs.readFileSync(configFile, 'utf-8')))
 }
 
-
-
-/**/
 const incomingMiddleware = (event, next) => {
   if (event.type === 'message') {
     Dandelion.getEntities({'text': event.text})
@@ -54,7 +47,6 @@ const incomingMiddleware = (event, next) => {
     next()
   }
 }
-/**/
 
 module.exports = {
   init: function(bp) {
