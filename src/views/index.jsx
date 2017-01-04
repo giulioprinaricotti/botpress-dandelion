@@ -8,57 +8,11 @@ import {
   FormGroup,
   FormControl,
   Alert,
-  FieldGroup,
   Button
 } from 'react-bootstrap'
 
-import Markdown from 'react-markdown'
-
 import style from './style.scss'
 
-const documentation = {
-  understanding: `
-  ### Understanding
-
-  This mode will inject understanding metadata inside incoming messages through the Wit.ai middleware.
-
-  Events will have a \`wit\` property populated with the extracted \`entities\` and the \`context\`.
-
-  **Tip:** Use this mode if you want to handle the conversation flow yourself and only want to extract entities from incoming text. This is great for programmers.
-
-  \`\`\`js
-  bp.hear({'wit.entities.intent[0].value': 'weather'}, (event, next) => {
-    console.log('>> Weather')
-    bp.messenger.sendText(event.user.id, 'Weather intent')
-  })
-  \`\`\`
-  `
-  ,
-  stories: `### Stories
-
-  This mode will run your Wit.ai stories automatically given that you defined the **Actions** in botpress.
-
-  For more information about Actions and how they are run, make sure to read [node-wit](https://github.com/wit-ai/node-wit)'s documentation.
-
-  **Tip:** Use this mode if you created a conversation flow on Wit.ai's User Interface and want it to run automatically in your bot. This is great for non-programmers.
-
-  #### Example
-
-  \`\`\`js
-  // Implement your Actions like this
-  bp.wit.actions['getWeather'] = request => {
-    return new Promise((resolve, reject) => {
-      bp.logger.info('Get Weather called', request)
-      // Do something here
-      resolve(request.context)
-    })
-  }
-
-  // You need to call this method once you are done implementing the Actions
-  bp.wit.reinitializeClient()
-  \`\`\`
-  `
-}
 
 export default class TemplateModule extends React.Component {
 
@@ -68,23 +22,16 @@ export default class TemplateModule extends React.Component {
     this.state = {
       loading: true,
       message: null,
-      initialStateHash: null,
-      modes: {
-        understanding: 'Understanding mode is...',
-        stories: 'Stories mode is...'
-      }
+      initialStateHash: null
     }
 
     this.renderAccessToken = this.renderAccessToken.bind(this)
-    this.renderRadioButton = this.renderRadioButton.bind(this)
-
     this.handleAccesTokenChange = this.handleAccesTokenChange.bind(this)
     this.handleSaveChanges = this.handleSaveChanges.bind(this)
-    this.handleRadioChange = this.handleRadioChange.bind(this)
   }
 
   getStateHash() {
-    return this.state.accessToken + ' ' + this.state.selectedMode
+    return this.state.accessToken
   }
 
   getAxios() {
@@ -111,18 +58,11 @@ export default class TemplateModule extends React.Component {
     })
   }
 
-  handleRadioChange(event) {
-    this.setState({
-      selectedMode: event.target.value
-    })
-  }
-
   handleSaveChanges() {
     this.setState({ loading:true })
 
     return this.getAxios().post('/api/botpress-dandelion/config', {
-      accessToken: this.state.accessToken,
-      selectedMode: this.state.selectedMode
+      accessToken: this.state.accessToken
     })
     .then(() => {
       this.setState({
@@ -157,19 +97,6 @@ export default class TemplateModule extends React.Component {
     )
   }
 
-  renderRadioButton(label, key, props) {
-    return (
-      <span className={style.radio} key={key}>
-        <label>
-          <input type="radio" value={key}
-            checked={this.state.selectedMode === key}
-            onChange={this.handleRadioChange} />
-          {label}
-        </label>
-      </span>
-    )
-  }
-
   renderMessageAlert() {
     return this.state.message
       ? <Alert bsStyle={this.state.message.type}>{this.state.message.text}</Alert>
@@ -190,7 +117,7 @@ export default class TemplateModule extends React.Component {
     }
 
     return (
-      <Grid className={style.wit}>
+      <Grid className={style.dandelion}>
         <Row>
           <Col md={8} mdOffset={2}>
             {this.renderMessageAlert()}
